@@ -2,7 +2,9 @@ package br.jhonisanjos.cursomc.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Produto implements Serializable{
@@ -31,6 +35,10 @@ public class Produto implements Serializable{
 	inverseJoinColumns = @JoinColumn(name = "catergoria_id"))
 	private List<Categoria> categorias = new ArrayList<Categoria>();
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ItemPedido> itens = new HashSet<ItemPedido>();
+	
 	public Produto() {
 	}
 
@@ -41,6 +49,16 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 
+	@JsonIgnore
+	public List<Pedido> getPedidos(){
+		List<Pedido> pedidos = new ArrayList<Pedido>();
+		for(ItemPedido item: this.itens) {
+			pedidos.add(item.getPedido());
+		}
+		return pedidos;
+	}
+	
+	
 	public String getNome() {
 		return nome;
 	}
@@ -71,6 +89,15 @@ public class Produto implements Serializable{
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
 	}
 
 	@Override

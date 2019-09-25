@@ -13,6 +13,7 @@ import br.jhonisanjos.cursomc.domain.Cidade;
 import br.jhonisanjos.cursomc.domain.Cliente;
 import br.jhonisanjos.cursomc.domain.Endereco;
 import br.jhonisanjos.cursomc.domain.Estado;
+import br.jhonisanjos.cursomc.domain.ItemPedido;
 import br.jhonisanjos.cursomc.domain.Pagamento;
 import br.jhonisanjos.cursomc.domain.PagamentoComBoleto;
 import br.jhonisanjos.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import br.jhonisanjos.cursomc.repository.CidadeRepository;
 import br.jhonisanjos.cursomc.repository.ClienteRepository;
 import br.jhonisanjos.cursomc.repository.EnderecoRepository;
 import br.jhonisanjos.cursomc.repository.EstadoRepository;
+import br.jhonisanjos.cursomc.repository.ItemPedidoRepository;
 import br.jhonisanjos.cursomc.repository.PagamentoRepository;
 import br.jhonisanjos.cursomc.repository.PedidoRepository;
 import br.jhonisanjos.cursomc.repository.ProdutoRepository;
@@ -46,7 +48,11 @@ public class CursomcApplication implements CommandLineRunner {
 	private EnderecoRepository enderecoRepository;
 	@Autowired
 	private PedidoRepository pedidoRepository;
-	@Autowired PagamentoRepository pagamentoRepository;
+	@Autowired 
+	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
+	
 	
 	
 	public static void main(String[] args) {
@@ -110,6 +116,13 @@ public class CursomcApplication implements CommandLineRunner {
 		ped2.setPagamento(pag2);
 		pedidoRepository.saveAll(Arrays.asList(ped1,ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pag1,pag2));
+		
+		
+		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.00, 1, 200.00);
+		ItemPedido ip2 = new ItemPedido(p3, ped1, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(p2, ped2, 100.00, 1, 800.00);
+		
+		this.itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
 	}
 
 }
